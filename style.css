@@ -1,5 +1,12 @@
-
+.head{
+    position: absolute;
+    left: auto;
+}
 h1{
     color: red;
+    top: 10px;
     font-size: 90px;
+}
+img{
+    top: 20px;
 }
