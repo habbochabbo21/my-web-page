@@ -3,80 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example List</title>
+    <title>Test Examples</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>List of Examples</h1>
-        <ul class="list-group" id="exampleList">
-            </ul>
+        <h1>Test Examples</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody id="exampleTableBody">
+            </tbody>
+        </table>
 
         <div class="input-group mb-3">
-            <input type="text" class="form-control" id="newExampleInput" placeholder="Enter a new example">
+            <input type="text" class="form-control" id="newExampleTitle" placeholder="Enter the title">
+            <input type="text" class="form-control" id="newExampleContent" placeholder="Enter the example">
             <button class="btn btn-primary" id="addExampleButton">Add Example</button>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const exampleList = document.getElementById('exampleList');
-        const newExampleInput = document.getElementById('newExampleInput');
+        const exampleTableBody = document.getElementById('exampleTableBody');
+        const newExampleTitle = document.getElementById('newExampleTitle');
+        const newExampleContent = document.getElementById('newExampleContent');
         const addExampleButton = document.getElementById('addExampleButton');
-        const optionsFilename = 'options.txt'; // Replace with your desired filename
 
-        // Load existing options from the file on page load
-        loadOptions();
-
-        function loadOptions() {
-            fetch(optionsFilename)
-                .then(response => response.text())
-                .then(data => {
-                    const options = data.split('\n');
-                    options.forEach(option => {
-                        if (option.trim() !== '') {
-                            const newExampleItem = document.createElement('li');
-                            newExampleItem.classList.add('list-group-item');
-                            newExampleItem.textContent = option;
-                            exampleList.appendChild(newExampleItem);
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error loading options:', error);
-                });
-        }
-
-        function saveOptions() {
-            const options = [];
-            exampleList.querySelectorAll('li').forEach(item => {
-                options.push(item.textContent);
-            });
-            const data = options.join('\n');
-            fetch(optionsFilename, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain'
-                },
-                body: data
-            })
-            .then(response => {
-                console.log('Options saved successfully');
-            })
-            .catch(error => {
-                console.error('Error saving options:', error);
-            });
-        }
+        // Load existing examples from a data source (if applicable)
 
         addExampleButton.addEventListener('click', () => {
-            const newExampleText = newExampleInput.value;
-            if (newExampleText) {
-                const newExampleItem = document.createElement('li');
-                newExampleItem.classList.add('list-group-item');
-                newExampleItem.textContent = newExampleText;
-                exampleList.appendChild(newExampleItem);
-                newExampleInput.value = '';
-                saveOptions(); // Save options after adding a new example
+            const newExampleTitleValue = newExampleTitle.value;
+            const newExampleContentValue = newExampleContent.value;
+            if (newExampleTitleValue && newExampleContentValue) {
+                const newExampleRow = document.createElement('tr');
+                newExampleRow.innerHTML = `
+                    <td>${newExampleTitleValue}</td>
+                    <td>${newExampleContentValue}</td>
+                `;
+                exampleTableBody.appendChild(newExampleRow);
+                newExampleTitle.value = '';
+                newExampleContent.value = '';
+
+                // Save the new example to a data source (if applicable)
             }
         });
     </script>
